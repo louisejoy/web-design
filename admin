@@ -1,0 +1,2514 @@
+<?php
+    include("../db.php");
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="modal-content" style="width: 1200px;margin-left: auto;margin-right: auto;">
+                    <div class="modal-header">
+                        <h4 class="modal-title" style="text-align: center;">ADDING EVENTS</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <form role="form" method="POST" action="">
+                            <div class="form-group col-md-6">
+                                <h5>Month</h5>
+                                <select name="event_month" class="form-control">
+                                    <option value="Jan">January</option>
+                                    <option value="Feb">February</option>
+                                    <option value="Mar">March</option>
+                                    <option value="Apr">April</option>
+                                    <option value="May">May</option>
+                                    <option value="Jun">June</option>
+                                    <option value="Jul">July</option>
+                                    <option value="Aug">August</option>
+                                    <option value="Sep">September</option>
+                                    <option value="Oct">October</option>
+                                    <option value="Nov">November</option>
+                                    <option value="Dec">December</option>
+                                </select>
+                            </div>
+                            <!-- ============================Day============================ -->
+                            <div class="form-group col-md-6">
+                                <h5>Day</h5>
+                                <select name="event_day" class="form-control">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                </select><br>
+                            </div>
+
+                            <div class="form-group">
+                                <h5>Add Title</h5>
+                                <input type="text" name="event_title" class="form-control" placeholder="Enter Event Title" required><br>
+                                <h5>Add Description</h5>
+                                <textarea name="event_desc" class="form-control" placeholder="Enter Event Description" required></textarea>
+                            </div>
+
+                        <button name="submit" type="submit" class="btn btn-default" style="margin-right: auto;margin-left: auto;display: block;">ADD</button><br>
+                        </form>
+                    <?php
+                        if(isset($_POST['submit'])){
+                            $event_month=$_POST['event_month'];
+                            $event_day=$_POST['event_day'];
+                            $event_title=$_POST['event_title'];
+                            $event_desc=$_POST['event_desc'];
+                            
+                            $insert=$conn->query("INSERT INTO event_tbl VALUES ('','$event_month','$event_day',\"$event_title\",\"$event_desc\",NOW(),0)");
+                            
+                            if(!$insert){
+                                die("<script>
+                                        alert('Error');
+                                        window.location.href='adminevent.php';
+                                     </script>");
+                            }else{
+                                echo "<script>
+                                        alert('Success');
+                                        window.location.href='adminevent.php';
+                                     </script>";
+                            }
+                        }
+                    ?>
+                <br/>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <tr>
+                            <th>
+                                EVENT MONTH
+                            </th>
+                            <th>
+                                EVENT DAY
+                            </th>
+                            <th>
+                                EVENT TITLE
+                            </th>
+                            <th>
+                                EVENT DESRIPTION
+                            </th>
+                            <th>
+                                DATE CREATED
+                            </th>
+                            <th>
+                                
+                            </th>
+                        </tr>
+                    <?php
+                        include("../db.php");
+
+                        $select=$conn->query("SELECT * FROM event_tbl WHERE event_order=0");
+
+                        $select1=mysqli_num_rows($select);
+
+                        if($select1>0){
+                            while($rw=mysqli_fetch_array($select)){
+                    ?>
+                        <tr>
+                            <td>
+                                <?php echo $rw['event_month']; ?>
+                            </td>
+                            <td>
+                                <?php echo $rw['event_day']; ?>
+                            </td>
+                            <td>
+                                <?php echo $rw['event_title']; ?>
+                            </td>
+                            <td>
+                                <?php echo $rw['event_desc']; ?>
+                            </td>
+                            <td>
+                                <?php echo $rw['date_created']; ?>
+                            </td>
+                            <td>
+                                <form action="" method="POST">
+                                    <input type="hidden" name="id" value="<?php echo $rw['event_id']; ?>">
+                                    <button type="submit" name="del" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php
+                        }
+                    }
+
+                    if(isset($_POST['del'])){
+                        $eventid=$_POST['id'];
+                        
+                        $update=$conn->query("UPDATE event_tbl SET event_order=1 WHERE event_id=$eventid");
+                        
+                        if(!$update){
+                            die("<script>
+                                    alert('Error');
+                                </script>");
+                        }else{
+                            die("<script>
+                                    alert('Successfully removed');
+                                    window.location.href='adminevent.php';
+                                 </script>");
+                        }
+                    }
+                    ?>
+                    </table><br><br>
+
+                    <p style="font-size:20px;">Removed:
+                    <?php
+                        $selectevent=$conn->query("SELECT * FROM event_tbl WHERE event_order=1 ORDER BY date_created DESC");
+                                
+                        $numrows1=mysqli_num_rows($selectevent);
+                        if($numrows1>0){
+                            echo $numrows1;
+                        }else{
+                            echo 0;
+                        }
+                    ?>
+                    </p>
+                    <table class="table table-hover" style="margin-top:15px;">
+                        <tr>
+                            <th>
+                                EVENT MONTH
+                            </th>
+                            <th>
+                                EVENT DAY
+                            </th>
+                            <th>
+                                EVENT TITLE
+                            </th>
+                            <th>
+                                EVENT DESRIPTION
+                            </th>
+                            <th>
+                                DATE CREATED
+                            </th>
+                            <th></th>
+                        </tr>
+                        <?php
+
+                    if($numrows1>0){
+                        while($row=mysqli_fetch_array($selectevent)){
+                            $id = $row['event_id'];
+                            $type = $row['event_order'];
+                ?>
+                        <tr>
+                            <td>
+                                <?php echo $row['event_month']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['event_day']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['event_title']; ?>
+                            </td>
+                            <td>
+                                <?php echo $row['event_desc']; ?>
+                            </td>
+                            <td>
+                                <?php echo date("l\, F j Y - h:i:s A", strtotime($row['date_created'])); ?>
+                            </td>
+                            <td><a href="delete.php?delEvent=<?php echo $id; ?>&&delType=<?php echo $type; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                        <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                        <?php echo  "<form action='' method='POST'>
+                                        <input type='hidden' name='id' value='$id'/>
+                                    </form>
+                                    </td>
+                                 </tr>";?>
+                        </tr>
+                        <?php
+                        }
+                    }
+                    ?>
+                    </table>
+                </div> 
+            </div>
+            <div class="modal-footer">
+                <a href="../events.php" type="button" class="btn btn-primary">View event page <span class="glyphicon glyphicon-arrow-right"></span></a>
+            </div>
+            </div><!-- end of modal content -->
+        </div>
+                
+</body>
+</html>
+<?php
+    }
+?>
+<?php
+    include("../db.php");
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Account</title>
+    <!-- web page icon -->
+    <link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+    <!-- css -->
+    <!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+    <!-- 
+        whole page 
+    -->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="page-header">
+                <h1 style="text-align:center">RESERVATIONS</h1>
+            </div>
+            <?php include('reserve-header.php'); ?>
+
+            <div>
+                <h3 style="text-align:center;">Total of:     
+                <?php
+                    include('../db.php');
+
+                    $count="SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=1 AND client_tbl.client_id=date_tbl.client_id";
+                    $count1=$conn->query($count);
+                            
+                    $numrows=mysqli_num_rows($count1);
+                    if($numrows>0){
+                        echo $numrows;
+                    }else{
+                        echo 0;
+                    }?>
+                </h3>
+
+                <br>
+                <h3 style="text-align:center;">Approved</h3> 
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.*, wed_tbl.wed_groom, wed_tbl.wed_bride FROM client_tbl, date_tbl, wed_tbl WHERE ordertype=1 AND client_order='wedding' AND client_tbl.client_id=date_tbl.client_id AND client_tbl.client_id=wed_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Approved Data Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='active'><th colspan='14' style='text-align: center'>WEDDING</th></tr>
+                                <tr class='success'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Groom</th>
+                                    <th>Bride</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='success'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".$row['wed_groom']."</td>
+                                    <td>".$row['wed_bride']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td>
+                                    <a href="delete.php?delReservation=<?php echo $clientID; ?>&&delOrder=<?php echo $order; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                    <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                        <?php echo  "
+                                    </td>
+                                 </tr>";
+                            $counter++;
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=1 AND client_order='baptism' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='active'><th colspan='14' style='text-align: center'>BAPTISM</th></tr>
+                                <tr class='success'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='success'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    <a href="delete.php?delReservation=<?php echo $clientID; ?>&&delOrder=<?php echo $order; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                    <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                        <?php echo  "
+                                    </td>
+                                 </tr>";
+                            $counter++;
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=1 AND client_order='funeral' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='active'><th colspan='14' style='text-align: center'>FUNERAL</th></tr>
+                                <tr class='success'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='success'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                    <a href="delete.php?delReservation=<?php echo $clientID; ?>&&delOrder=<?php echo $order; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                    <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                        <?php echo  "
+                                    </td>
+                                 </tr>";
+                            $counter++;
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=1 AND client_order='mass' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='active'><th colspan='14' style='text-align: center'>MASS</th></tr>
+                                <tr class='success'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='success'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td>
+                                    <a href="delete.php?delReservation=<?php echo $clientID; ?>&&delOrder=<?php echo $order; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                    <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                                    </td>
+                                    <td></td>
+                                    <td>
+                        <?php echo  "
+                                    </td>
+                                 </tr>";
+                            $counter++;
+                        }
+                    }
+                ?>
+                </table>
+        
+                <script>
+                function myFunction() {
+                    var input, filter, table, tr, td, i;
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                        for (i = 0; i < tr.length; i++) {
+                            td = tr[i].getElementsByTagName("td")[1]; // This code only get the first "td" element
+                            if (td) {
+                                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                             }         
+                        }
+                }
+                </script>
+            </div>
+
+        <div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+    </div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+                window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+
+
+<?php
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+                 <nav class="navbar navbar-default" role="navigation">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                    <a id="nav" class="navbar-brand" href="../index.php">St Vincent Ferer Parish Church<small>&nbsp(Admin)</small></a>
+                </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="accountset.php"><span class="glyphicon glyphicon-circle-arrow-left" style="margin-right:5px;"></span>Go Back</a></li>
+                        <li><a id="nav" href="logout.php"><span class="glyphicon glyphicon-off" style="margin-right:5px;"></span>Log out</a></li>
+                    </ul>
+              </div>
+            </nav>
+                        <div class="modal-content" style="width:500px;margin-left:auto;margin-right:auto;margin-top:50px;margin-bottom:88px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Password</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                    <?php
+                        include("../db.php");
+
+                        $db1="SELECT * FROM admin_tbl";
+                        $select1=$conn->query($db1);
+
+                        while($row=mysqli_fetch_array($select1)){
+                            $passw=$row['admin_pass'];
+                        }
+                    ?>
+                    <input type="password" class="form-control" value="" name="oldpass" placeholder="Enter Old Password"/>
+                    <input style="margin-top:5px;" type="password" class="form-control" value="" name="newpass" placeholder="Enter New Password"/>
+                    <input style="margin-top:5px;" type="password" class="form-control" value="" name="repass" placeholder="Re-Enter New Password"/>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="save" class="btn btn-primary" value="Save Changes"/>
+                    <?php
+                        if(isset($_POST['save'])){
+                            $oldpass=md5($_POST['oldpass']);
+                            $newpass=md5($_POST['newpass']);
+                            $repass=md5($_POST['repass']);
+                            
+                            $newpassw=strlen($newpass);
+                            
+                            if(empty ($oldpass)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Old password is required</p>";
+                            }else if(empty ($newpass)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> New password is required</p>";
+                            }else if(empty ($repass)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Please re-enter new password</p>";
+                            }else if($newpass != $repass){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> New password did not match</p>";
+                            }else if($newpassw <= 7){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> New password must be 8 characters and above</p>";
+                            }else if($oldpass != $passw){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Old password is incorrect</p>";
+                            }else{
+                                $update="UPDATE admin_tbl SET admin_pass='$newpass'";
+                                $update1=$conn->query($update);
+                                
+                                if(!$update1){
+                                    die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='changeuser.php';
+                                     </script>");
+                                }else{
+                                    die("<script>
+                                        alert('Admin password changed succesfully');
+                                        window.location.href='accountset.php';
+                                     </script>");
+                                }
+                                
+                            }
+                        }
+                    ?>
+
+                </form>
+            </div>
+        </div>
+        <div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+        
+</body>
+</html>
+<?php
+
+}
+?>
+<?php
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+                 <nav class="navbar navbar-default" role="navigation">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                    <a id="nav" class="navbar-brand" href="../index.php">St Vincent Ferer Parish Church<small>&nbsp(Admin)</small></a>
+                </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="accountset.php"><span class="glyphicon glyphicon-circle-arrow-left" style="margin-right:5px;"></span>Go Back</a></li>
+                        <li><a id="nav" href="logout.php"><span class="glyphicon glyphicon-off" style="margin-right:5px;"></span>Log out</a></li>
+                    </ul>
+              </div>
+            </nav>
+            
+                <div class="modal-content" style="width:500px;margin-left:auto;margin-right:auto;margin-top:50px;margin-bottom:50px;">
+                <div class="modal-header">
+                    <h4 class="modal-title">Username</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST">
+                    <?php
+                        include("../db.php");
+
+                        $db1="SELECT * FROM admin_tbl";
+                        $select1=$conn->query($db1);
+
+                        while($row=mysqli_fetch_array($select1)){
+                            $user=$row['admin_user'];
+                            $passw=$row['admin_pass'];
+                        }
+                    ?>
+                    <h5>Enter new username here <span class="glyphicon glyphicon-arrow-down"></span></h5>
+                    <input type="text" class="form-control" value="<?php echo $user; ?>" name="user"/>
+                </div>
+                <div class="modal-body">
+                    <h4 class="modal-title">Enter password to save changes</h4><br/>
+                    <input type="password" class="form-control" value="" name="pass" placeholder="Enter Password"/>
+                    <input style="margin-top:5px;" type="password" class="form-control" value="" name="repass" placeholder="Re-Enter Password"/>
+                </div>
+                <div class="modal-footer">
+                    <input type="submit" name="save" class="btn btn-primary" value="Save Changes"/>
+                    <?php
+                        if(isset($_POST['save'])){
+                            $user=$_POST['user'];
+                            $pass=md5($_POST['pass']);
+                            $repass=md5($_POST['repass']);
+                           
+                            if(empty ($user)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Username is required</p>";
+                            }else if(empty ($pass)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Password is required</p>";
+                            }else if(empty ($repass)){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Please re-enter password</p>";
+                            }else if($pass != $repass){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Password did not match</p>";
+                            }else if($pass != $passw){
+                                echo "<br/><p style='text-align:center;'><span class='glyphicon glyphicon-warning-sign'></span> Password is incorrect</p>";
+                            }else{
+                                $update="UPDATE admin_tbl SET admin_user='$user'";
+                                $update1=$conn->query($update);
+                                
+                                if(!$update1){
+                                    die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='changeuser.php';
+                                     </script>");
+                                }else{
+                                    die("<script>
+                                        alert('Admin username changed succesfully');
+                                        window.location.href='accountset.php';
+                                     </script>");
+                                }
+                                
+                            }
+                        }
+                    ?>
+                    </form>
+                </div>
+            </div>
+        </div>
+         <div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+        
+</body>
+</html>
+<?php
+    }
+?>
+        
+<?php
+include('../db.php');
+if(isset($_GET['delReservation'])){
+	$clientID = $_GET['delReservation'];
+    $order = $_GET['delOrder'];
+
+    // ================================================DELETE WEDDING====================================================
+    if($order=='wedding'){       
+        $set = $conn->query('SET foreign_key_checks = 0');  
+        if(!$set){
+            die('error');
+        }else{    
+        	$sql = "DELETE FROM wed_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM date_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM client_tbl WHERE client_id='$clientID'";
+
+        	if ($conn->multi_query($sql) === TRUE) {
+
+                $set1 = $conn->query('SET foreign_key_checks = 1');  
+    		    die("<script>
+                        alert('Records succesfully deleted');
+                        window.location.href='reservation.php';
+                    </script>");
+    		} 
+
+    		else {
+    		    die("<script>
+                        alert('Error encountered, Reloading page');
+                        window.location.href='reservation.php';
+                    </script>");
+    		}
+        }
+    }
+
+    // ================================================DELETE BAPTISM======================================================
+    if($order=='baptism'){ 
+        $selectBap=$conn->query("SELECT * FROM bap_tbl");
+
+        while($row=mysqli_fetch_array($selectBap)){
+            $bapID = $row['bap_id'];
+        }
+        $set = $conn->query('SET foreign_key_checks = 0');  
+        if(!$set){
+            die('error');
+        }else{
+            $sql = "DELETE FROM bap_sponsors WHERE bap_id='$bapID';";
+            $sql .= "DELETE FROM bap_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM date_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM client_tbl WHERE client_id='$clientID'";
+
+            if ($conn->multi_query($sql) === TRUE) {
+
+                $set1 = $conn->query('SET foreign_key_checks = 1');  
+                die("<script>
+                        alert('Records succesfully deleted');
+                        window.location.href='reservation.php';
+                    </script>");
+            } 
+
+            else {
+                die("<script>
+                        alert('Error encountered, Reloading page');
+                        window.location.href='reservation.php';
+                    </script>");
+            }
+        }
+    }
+
+    // ================================================DELETE FUNERAL======================================================
+    if($order=='funeral'){
+        $set = $conn->query('SET foreign_key_checks = 0');  
+        if(!$set){
+            die('error');
+        }else{   
+            $sql = "DELETE FROM funeral_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM date_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM client_tbl WHERE client_id='$clientID'";
+
+            if ($conn->multi_query($sql) === TRUE) {
+
+                $set1 = $conn->query('SET foreign_key_checks = 1');  
+                die("<script>
+                        alert('Records succesfully deleted');
+                        window.location.href='reservation.php';
+                    </script>");
+            } 
+
+            else {
+                die("<script>
+                        alert('Error encountered, Reloading page');
+                        window.location.href='reservation.php';
+                    </script>");
+            }
+        }
+    }
+
+     // ================================================DELETE MASS======================================================
+    if($order=='mass'){
+        $set = $conn->query('SET foreign_key_checks = 0');  
+        if(!$set){
+            die('error');
+        }else{   
+            $sql = "DELETE FROM mass_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM date_tbl WHERE client_id='$clientID';";
+            $sql .= "DELETE FROM client_tbl WHERE client_id='$clientID'";
+
+            if ($conn->multi_query($sql) === TRUE) {
+
+                $set1 = $conn->query('SET foreign_key_checks = 1');  
+                die("<script>
+                        alert('Records succesfully deleted');
+                        window.location.href='reservation.php';
+                    </script>");
+            } 
+
+            else {
+                die("<script>
+                        alert('Error encountered, Reloading page');
+                        window.location.href='reservation.php';
+                    </script>");
+            }
+        }
+    }
+
+}
+
+// ====================================================DELETE EVENT=================================================
+if(isset($_GET['delEvent'])){
+    $id = $_GET['delEvent'];
+    $type = $_GET['delType'];
+
+    if($type==1){
+        $set = $conn->query('SET foreign_key_checks = 0');  
+        if(!$set){
+            die('error');
+        }else{
+            $sql = $conn->query("DELETE FROM event_tbl WHERE event_id='$id'");
+
+            if(!$sql){
+                die("<script>
+                        alert('Error encountered, Reloading page');
+                        window.location.href='adminevent.php';
+                    </script>");
+            }else{
+                $set1 = $conn->query('SET foreign_key_checks = 1');  
+                die("<script>
+                        alert('Records succesfully deleted');
+                        window.location.href='adminevent.php';
+                    </script>");
+            }
+        }
+    }
+}
+?>
+<?php
+    include("../db.php");
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Account</title>
+    <!-- web page icon -->
+    <link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+    <!-- css -->
+    <!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+    <!-- 
+        whole page 
+    -->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="page-header">
+                <h1 style="text-align:center">RESERVATIONS</h1>
+            </div>
+            <?php include('reserve-header.php'); ?>
+                 
+                <h3 style="text-align:center;">Total of:     
+                <?php
+                    include('../db.php');
+
+                    $count="SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=2 AND client_tbl.client_id=date_tbl.client_id";
+                    $count1=$conn->query($count);
+                            
+                    $numrows=mysqli_num_rows($count1);
+                    if($numrows>0){
+                        echo $numrows;
+                    }else{
+                        echo 0;
+                    }?>
+                </h3> 
+            <!-- ================================================DENIED=================================================== -->
+
+                <h3 style="text-align:center;">Denied</h3>     
+                <?php
+                    include("../db.php");
+                    $select="SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=2 AND client_tbl.client_id=date_tbl.client_id";
+                    $select1=$conn->query($select);
+                    
+                    $numrows=mysqli_num_rows($select1);
+                    if($numrows<=0){
+                        echo "<p style='font-size:16px;text-align:center'>No Denied Reservations Found</p>";
+                    }else{?>
+                            <table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='danger'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>ID no.</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                     <?php  
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($select1)){
+                            $clientID=$row['client_id'];
+                            $order = $row['client_order'];
+
+                            echo "<tr class='danger'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_id']."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td style='width:500px;'>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".ucwords($order)."</td>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td>
+                                    <a href="delete.php?delReservation=<?php echo $clientID; ?>&&delOrder=<?php echo $order; ?>" onclick="javascript: return confirm('Confirm Deletion?')" style='color: black;'>
+                                    <button style='background:transparent;border:1px solid transparent' type='button'><span class='glyphicon glyphicon-trash'></span></button></a>
+                        <?php echo  "
+                                    </td>
+                                 </tr>";
+                            $counter++;
+                        }
+                    }
+                ?>
+                </table>
+                <script>
+                function myFunction() {
+                    var input, filter, table, tr, td, i;
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                        for (i = 0; i < tr.length; i++) {
+                            td = tr[i].getElementsByTagName("td")[1]; // This code only get the first "td" element
+                            if (td) {
+                                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                             }         
+                        }
+                }
+                </script>
+            </div><!-- DENIED TABLE ENDS -->
+
+        <div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+    </div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+                window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+
+
+<?php
+include("../db.php");
+if(isset($_GET['clientOrder'])){
+    $order = $_GET['clientOrder'];
+    $id = $_GET['clientID'];
+
+    // ================================================WEDDING FORM===============================================
+    if($order=='wedding'){
+        $data = $conn->query("SELECT client_tbl.client_order, client_tbl.client_fname, client_tbl.client_lname, client_tbl.client_contact, client_tbl.client_email, date_tbl.date, date_tbl.time, wed_tbl.wed_groom, wed_tbl.wed_bride FROM client_tbl INNER JOIN date_tbl ON client_tbl.client_id=date_tbl.client_id INNER JOIN wed_tbl ON client_tbl.client_id=wed_tbl.client_id WHERE client_tbl.client_id='$id'");
+
+        while($row = mysqli_fetch_assoc($data)){
+            $fname      =$row['client_fname'];
+            $lname      =$row['client_lname'];
+            $contact    =$row['client_contact'];
+            $email      =$row['client_email'];
+            $date       =$row['date'];
+            $time       =$row['time'];
+
+            $groom      =$row['wed_groom'];
+            $bride      =$row['wed_bride'];
+        }
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Submitted Form</title>
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+</head>
+<style type="text/css" media="print">
+.dontprint
+{ display: none; }
+</style>
+<body>
+	<div class="modal-content" style="width: 1000px;margin-left: auto;margin-right: auto">
+        <div class="modal-header">
+            <h4 class="modal-title col-md-8">WEDDING FORM</h4>
+            <h5 class="dontprint modal-title col-md-4" style="text-align: right;"><a href="reservation.php" style="text-decoration: none;color: black;"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</a></h5>
+        </div>
+
+        <div class="modal-body">
+            <div class="modal-title">FROM</div>
+            <p><b>Name:</b> <?php echo "$fname"." "."$lname"; ?> <br>
+                <b>Email:</b> <?php echo "$email"; ?> <br>
+                <b>Contact:</b> <?php echo "$contact"; ?>
+            </p>
+        </div>
+            <div class="modal-body">
+              <!--   <div class="col-md-12">
+                    <?php 
+                    $selectimg = $conn->query("SELECT img_upload.img_id, img_upload.img_link FROM img_upload ORDER BY img_id DESC LIMIT 2 "); /*pag litaw ng picture galing sa database*/
+                        while($row = mysqli_fetch_array($selectimg)){
+                            echo "<img  style='width: 200px; height: 200px;float: left;' src='".$row['img_link']."'/>";
+                        }
+                     ?>
+                </div> -->
+                <h4 style="font-family:Arial Black">MGA PATAKARAN SA KASAL</h4>
+
+                <form action="">
+                    <div class="form-group col-md-12" style="margin-left: -15px">
+                        <h5 for="inputUser" class="control-label" style="font-family:Lucida Calligraphy">Name of Groom and Bride</h5>
+                        <div class="col-md-6" style="margin-left: -15px">
+                            <input name="groom" type="text" class="form-control" value="<?php echo $groom; ?>" disabled="">
+                            <p class="help-block">Groom Name</p>
+                        </div>
+                        <div class="col-md-6">
+                            <input name="bride" type="text" class="form-control" value="<?php echo $bride; ?>" disabled="">
+                            <p class="help-block">Bride Name</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <h5 class="control-label" style="font-family:Lucida Calligraphy;margin-left: -15px">Contact Number:</h5> 
+                            <input style="margin-left: -15px" type="text" class="form-control" name="cnum" value="<?php echo $contact; ?>" disabled="">
+                        </div>
+                        <div class="col-md-4">
+                            <h5 class="control-label" style="font-family:Lucida Calligraphy;margin-left: -15px">Petsa ng Kasal:</h5>
+                            <input type="text" name="datepicker" class="form-control" value="<?php echo date("F j, Y ", strtotime($date)); ?>" disabled="" style="margin-left: -15px"/>
+                        </div>
+                        <div class="col-md-4">
+                            <h5 for="inputDate" class="control-label" style="font-family:Lucida Calligraphy;">Oras: </h5>
+                            <input type="text" name="time" value="<?php echo date('h:i a', strtotime($time)); ?>" disabled="" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <h4><span class="glyphicon glyphicon-exclamation-sign"></span> <b>MGA DAPAT ISUMITENG PAPELES:</b><small> (Please check if you already have the following)</small></h4>
+                        <div style="margin-left: 30px">
+                            <h4>Bride & Groom&nbsp;  1,NSO/PSA Birth Certificate (Bagong Certificate)</h4>
+                            <h4>Bride & Groom&nbsp;  2,Baptismal Certficate (for Marriage purpose,Pagkakabinyag)</h4>
+                            <h4>Bride & Groom&nbsp;  3,Confirmation Certificate (Pagkukumpil for Marriage purpose)</h4>
+                            <h4>Bride & Groom&nbsp;  4,CENOMAR(Certificate of No Marriage)</h4>
+                            <h4>Bride & Groom&nbsp;  5,Marriage License</h4>
+                            <h4>Bride & Groom&nbsp;  6,Marriage Banns (no less than three (3)weeks)</h4>
+                            <h4>Bride & Groom&nbsp;  7,List of Sponsor(invitation)</h4>
+                            <h4>Bride & Groom&nbsp;  8,2x2 picture (Bride and Groom 3 copies each)</h4>
+                            <h4>Bride & Groom&nbsp;  9,Sedula</h4>
+                            <h4>Bride & Groom&nbsp;   10,Permit from respective parish</h4>
+                            <h4>Bride & Groom&nbsp;   11,Certificate of no record if not yet baptized and confimed</h4>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group col-md-12">
+                        <h4><span class="glyphicon glyphicon-exclamation-sign"></span> <b>MGA DAPAT DALUHANG SEMINAR:</b></h4>
+                        <div style="margin-left: 30px">
+                            <h4>1, Seminar of Pre-cana</h4>
+                            <h4>2, Seminar of Confimation,Baptism</h4>
+                            <h4>3, Confirmation and Baptism</h4>
+                            <h4>4, Kumpisal</h4>
+                            <h4>5, Interview by the Parish </h4>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group col-md-12">
+                        <h4><span class="glyphicon glyphicon-exclamation-sign"></span> <b>MGA DAPAT IHANDA SA KASAL - Belo, Kurdon <br>MGA DAPAT BAYARAN</b></h4>
+                        <div style="margin-left: 30px">
+                            <h4>1, Nupital Wedding(No Mass)</h4>
+                            <h4>2, Nupital with mass</h4>
+                            <h4>3, Certificae</h4>
+                            <h4>4, Organist</h4>
+                            <h4>5, Kumpil</h4>
+                            <h4>6, Binyag</h4>
+                            <h4>7, Kandila</h4>
+                            <h4>8, Singer</h4>
+                            <h4>9, Seminar of Pre-Cana</h4>
+                            <h4>10, Video,VCR,(Kung gagamit ng kuryente)</h4>
+                        </div>
+                    </div><br><br>
+
+                    <h4 style="font-family:Arial Black">Paalala:</h4>
+                    <h5>1, Ang hindi makadalo sa mga seminar, hindi makapagpasa ng anumang kinakailangang papeles at hindi makakapag bayad sa takdang araw bago ang kasal ay maaring hindi maikasal.</h5>
+                    <h5>2, Dumating ng Labinglimang minuto bago ikasal upang hindi maatrasado ng kasal(15 minutes before the wedding). Kayo din po ay mayroon lamamg ma 50 minutes sa loob ng simbahan para sa picture taking at upang maihanda pa ang mga susunod pang schedule sa parokya.</h5>
+                    <h5>3, Ang mga ring bearers,flower girl ay dapat limang taong gulang pataas at ng hindi na ito inaakay ng magulang sa bridal enthourage. Upang maiwasan din ang pagka atrasado ng kasal.</h5>
+                    <h5>4, Ang mga ninong ata ninang , dapat ito ay may asawa na, at binyagan sa katoliko.</h5>
+                    <h5>5, Pakisabihan din po ang mga dadalo sa kasal na panatilihin ang katahimikan sa loob ng simbahan upang maging solemno ang sakramento, gayundin ang pagkain sa loob ng simbahan ay mahigpit na pinagbabawal. </h5><br>
+  
+                </form>
+            </div>
+            <script>
+                function myFunction() {
+                    window.print();
+                }
+            </script>
+            <div class="modal-footer">
+                <br><br><br><button style="display:block;margin-left:auto;margin-top:-50px" class="btn btn-primary btn-lg hidden-print" onclick="myFunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+            </div>
+    </div>
+<?php 
+    }
+
+    // ================================================BAPTISM FORM===============================================
+    if($order=='baptism'){
+        $data = $conn->query("SELECT client_tbl.client_order, client_tbl.client_fname, client_tbl.client_lname, client_tbl.client_contact, client_tbl.client_email, date_tbl.date, date_tbl.time, bap_tbl.bap_id, bap_tbl.bap_child, bap_tbl.bap_age, bap_tbl.bap_father, bap_tbl.bap_mother, bap_tbl.child_birthday, bap_tbl.child_birthplace, bap_tbl.child_gender, bap_tbl.legitimacy, bap_tbl.father_origin, bap_tbl.mother_origin, bap_tbl.parent_residence FROM client_tbl INNER JOIN date_tbl ON client_tbl.client_id=date_tbl.client_id INNER JOIN bap_tbl ON client_tbl.client_id=bap_tbl.client_id WHERE client_tbl.client_id='$id'");
+
+        while($row = mysqli_fetch_array($data)){
+            $fname      =$row['client_fname'];
+            $lname      =$row['client_lname'];
+            $contact    =$row['client_contact'];
+            $email      =$row['client_email'];
+            $date       =$row['date'];
+            $time       =$row['time'];
+
+            $bapID              =$row['bap_id'];
+            $childName          =$row['bap_child'];
+            $childAge           =$row['bap_age'];
+            $childFather        =$row['bap_father'];
+            $childMother        =$row['bap_mother'];
+
+            $childBday          =$row['child_birthday'];
+            $childBplace        =$row['child_birthplace'];
+            $childGender        =$row['child_gender'];
+            $childStatus        =$row['legitimacy'];
+            $fatherOrigin       =$row['father_origin'];
+            $motherOrigin       =$row['mother_origin'];
+            $parentResidence    =$row['parent_residence'];
+
+        }
+
+    ?>
+        <head>
+            <title>Submitted Form</title>
+            <!-- web page icon -->
+            <link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- bootstrap -->
+            <link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+        </head>
+        <style type="text/css" media="print">
+        .dontprint
+        { display: none; }
+        </style>
+            <div class="modal-content" style="width: 1000px;margin-left: auto;margin-right: auto">
+                <div class="modal-header">
+                    <h4 class="modal-title col-md-8">BAPTISM FORM</h4>
+                    <h5 class="dontprint modal-title col-md-4" style="text-align: right;"><a href="reservation.php" style="text-decoration: none;color: black;"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</a></h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="modal-title">FROM</div>
+                    <p><b>Name:</b> <?php echo "$fname"." "."$lname"; ?> <br>
+                        <b>Email:</b> <?php echo "$email"; ?> <br>
+                        <b>Contact:</b> <?php echo "$contact"; ?>
+                    </p>
+                </div>
+                    <div class="modal-body">
+                        <img src="../resources/baptism/vincent-ferrer-saint.jpg" style="float: left;width: 100px;height: 150px;">
+                        <h1 style="font-family:Old English Text MT">St. Vincent Ferer Parish</h1>
+                        <h3 style="font-family:Kunstler Script">Brgy. Mayapyap Sur Cabanatuan City N.E.</h3><br>
+                        <h2 style="font-family:Old English Text MT;text-align: center;">Form of the Baptismal receipt</h2>
+
+                        <form action="" method="POST" role="form">
+                            <h5>Name of child:</h5>
+                            <input type="text" name="childName" class="form-control col-md-6" value="<?php echo $childName; ?>" disabled=""><br><br>
+                            <div class="form-group" style="margin-left: -15px">
+                                <div class="col-md-4">
+                                    <h5>Date of Baptism:</h5>
+                                    <input type="text" name="datepicker" class="form-control" value="<?php echo date("F j, Y ", strtotime($date)); ?>" disabled="" />
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Time:</h5> 
+                                    <input type="text" name="time" class="form-control" value="<?php echo date('h:i a', strtotime($time)); ?>" disabled="">
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Contact Number:</h5> 
+                                    <input type="text" name="bapcontact" class="form-control col-md-6" value="<?php echo $contact; ?>" disabled=""><br><br>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-left: -15px">
+                                <div class="col-md-7">
+                                    <h5 for="inputDate" class="control-label">Birth Place:</h5>
+                                    <input type="text" name="bapBplace" class="form-control" value="<?php echo $childBplace; ?>" disabled="">
+                                </div>
+
+                                <div class="col-md-3">
+                                    <h5 class="control-label">Birthday:</h5>
+                                   <input type="date" name="bapBday" class="form-control" value="<?php echo $childBday; ?>" disabled="" >
+                                </div>
+
+                                <div class="col-md-2">
+                                    <h5 class="control-label col-md-3" style="margin-left: -15px">Legitimacy:</h5>
+                                    <input name="bapStatus" class="form-control" value="<?php echo $childStatus; ?>" disabled="">
+                                </div><br><br>
+                            </div>
+
+                            <div class="form-group" style="margin-left: -15px">
+                                <div class="col-md-3">
+                                    <h5>Gender:&nbsp;</h5>
+                                    <label class="radio-inline">
+                                        <input style="margin-left: -15px" type="text" class="form-control" name="gender" value="<?php echo $childGender; ?>" disabled="" >
+                                    </label>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <h5>Yrs.old </h5>
+                                    <label class="radio-inline">
+                                        <input style="margin-left: -15px" type="number" name="ageyr" class="form-control" value="<?php echo $childAge; ?>" disabled="">
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-left: -15px">
+                                <div class="col-md-6">
+                                    <h5>Father:</h5>
+                                    <input type="text" name="bapFather" class="form-control col-md-6" value="<?php echo $childFather; ?>" disabled="" ><br><br>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Place of Origin:</h5> 
+                                    <input type="text" name="bapForig" class="form-control col-md-6" value="<?php echo $fatherOrigin; ?>" disabled="" > <br><br>
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-left: -15px">
+                                <div class="col-md-6">
+                                    <h5>Mother:</h5>
+                                    <input type="text" name="bapMother" class="form-control col-md-6" value="<?php echo $childMother; ?>" disabled="" ><br><br>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Place of Origin:</h5> 
+                                    <input type="text" name="bapMorig" class="form-control col-md-6" value="<?php echo $motherOrigin; ?>" disabled="" > <br><br>
+                                </div>
+                                <div class="col-md-12">
+                                    <h5>Residence:</h5> 
+                                    <input type="text" name="bapParentsplace" class="form-control" value="<?php echo $parentResidence; ?>" disabled="" > <br><br>
+                                </div>
+                            </div>
+
+                            <hr>
+
+                            <h3 style="color:red;text-align: center">S P O N S O R S</h3>
+
+                            <hr>
+
+                            <?php 
+                            $spnsrArr = $conn->query("SELECT bap_sponsors.* FROM bap_sponsors WHERE bap_id='$bapID'");
+
+                            $i = 0;
+                            while ($row = mysqli_fetch_array($spnsrArr)) {
+                                $spnsrName = $row['sponsors_name'];
+                                $spnsrAge = $row['sponsors_age'];
+                                $spnsrReligion = $row['sponsors_religion'];
+                                $spnsrPlace = $row['sponsors_residence'];
+                                $i++;
+
+                             ?>
+
+
+                            <label>SPONSOR #<?php echo $i;?></label>
+                            <div class="form-group">
+                                <div class="col-md-6">
+                                    <h5>Name:</h5> 
+                                    <input type="text" name="spnsName[]" class="form-control" value="<?php echo $spnsrName; ?>" disabled="" />
+                                </div>
+                                <div class="col-md-2">
+                                    <h5>Age:</h5>
+                                    <input type="number" name="age[]" class="form-control" value="<?php echo $spnsrAge; ?>" disabled="" />
+                                </div>
+                                <div class="col-md-4">
+                                    <h5>Religion:</h5> 
+                                    <input type="text" name="spnsrreligion[]" class="form-control" value="<?php echo $spnsrReligion; ?>" disabled="" />
+                                </div>
+                                <div class="col-md-12">
+                                    <h5>Residence:</h5> 
+                                    <input type="text" name="spnsrresidence[]" class="form-control" value="<?php echo $spnsrPlace; ?>" disabled=""/><br><hr>
+                                </div>
+                            </div>
+
+                            <?php } ?>
+
+                            <p style="color:red;">Paalala: 1, Itype ng maayos ang mga impormasyon,SAGUTIN LAHAT NG MGA KATANUNGAN. 2, Obligasyon po na iptala ng lahat ng mga ninong at ninang dumalo man ito o hindi. 3, Kung may mali man ukol sa mahahalagang detalye, maari itong ipaayos kontakin lamang po kami sa loob ng sampung araw. 4, Birth Certificate (NSO) Kung ang bata ay may mahigit isang taong gulang or Local(LCR) Kung ito ay wala pang isang taon, ito ang kailangan papeles sa binyag. 5, Ang takip Binyag at ang mga kandila ay kasama sa mga babayaran sa aming opisina...Maraming Salamt po</p>
+                            <br> 
+                    </form>
+                </div>
+                <script>
+                    function myFunction() {
+                        window.print();
+                    }
+                </script>
+                <div class="modal-footer">
+                    <br><br><br><button style="display:block;margin-left:auto;margin-top:-50px" class="btn btn-primary btn-lg hidden-print" onclick="myFunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+                </div>
+            </div>
+<?php 
+    } 
+    
+    // ================================================FUNERAL FORM===============================================
+    if($order=='funeral'){
+
+        $data = $conn->query("SELECT client_tbl.client_order, client_tbl.client_fname, client_tbl.client_lname, client_tbl.client_contact, client_tbl.client_email, date_tbl.date, date_tbl.time, funeral_tbl.funeral_name, funeral_tbl.funeral_relation, funeral_tbl.funeral_other FROM client_tbl INNER JOIN date_tbl ON client_tbl.client_id=date_tbl.client_id INNER JOIN funeral_tbl ON client_tbl.client_id=funeral_tbl.client_id WHERE client_tbl.client_id='$id'");
+
+        while($row = mysqli_fetch_assoc($data)){
+            $fname          =$row['client_fname'];
+            $lname          =$row['client_lname'];
+            $contact        =$row['client_contact'];
+            $email          =$row['client_email'];
+            $date           =$row['date'];
+            $time           =$row['time'];
+
+            $deadName       =$row['funeral_name'];
+            $deadRelation   =$row['funeral_relation'];
+            $comment        =$row['funeral_other'];
+
+        }
+    ?>
+         <head>
+            <title>Submitted Form</title>
+            <!-- web page icon -->
+            <link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- bootstrap -->
+            <link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+        </head>
+        <style type="text/css" media="print">
+        .dontprint
+        { display: none; }
+        </style>
+            <div class="modal-content" style="width: 1000px;margin-left: auto;margin-right: auto">
+                <div class="modal-header">
+                    <h4 class="modal-title col-md-8">FUNERAL FORM</h4>
+                    <h5 class="dontprint modal-title col-md-4" style="text-align: right;"><a href="reservation.php" style="text-decoration: none;color: black;"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</a></h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="modal-title">FROM</div>
+                    <p><b>Name:</b> <?php echo "$fname"." "."$lname"; ?> <br>
+                        <b>Email:</b> <?php echo "$email"; ?> <br>
+                        <b>Contact:</b> <?php echo "$contact"; ?>
+                    </p>
+                </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <div class="form-group" style="margin-left: -15px">
+                                
+                                <div class="col-md-6">
+                                    <h5 style="font-family:Lucida Calligraphy">Name of Deceased:</h5>
+                                    <input type="text" class="form-control" name="funeral_name" value="<?php echo $deadName; ?>" disabled="">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5 style="font-family:Lucida Calligraphy">Relationship to Deceased:</h5> 
+                                    <input type="text" class="form-control" name="funeral_relationship" value="<?php echo $deadRelation; ?>" disabled="">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Contact Number:</h5> 
+                                    <input type="text" class="form-control" name="funeral_contact" value="<?php echo $contact; ?>" disabled="">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Date:</h5> 
+                                   <input type="text" name="datepicker" class="form-control" value="<?php echo date("F j, Y ", strtotime($date)); ?>" disabled=""/>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Time:</h5> 
+                                    <input type="text" name="time" value="<?php echo date('h:i a', strtotime($time)); ?>" disabled="" class="form-control">
+                                </div>
+
+                                <div class="col-md-12">
+                                    <h5 style="font-family:Lucida Calligraphy">Other information or Request</h5>
+                                    <textarea style="resize: none" name="cmnt" disabled="" class="form-control col-md-6" rows="4"> <?php echo nl2br($comment); ?></textarea> 
+                                </div>
+                            </div>
+                            <p class="help-block">Client's comment</p><br>
+                        </form>
+                    </div>
+                    <script>
+                        function myFunction() {
+                            window.print();
+                        }
+                    </script>
+                    <div class="modal-footer">
+                        <br><br><br><button style="display:block;margin-left:auto;margin-top:-50px" class="btn btn-primary btn-lg hidden-print" onclick="myFunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+                    </div>
+            </div>
+
+
+<?php }
+    if($order=='mass'){
+
+        $data = $conn->query("SELECT client_tbl.client_order, client_tbl.client_fname, client_tbl.client_lname, client_tbl.client_contact, client_tbl.client_email, date_tbl.date, date_tbl.time, mass_tbl.mass_name, mass_tbl.mass_type, mass_tbl.mass_other FROM client_tbl INNER JOIN date_tbl ON client_tbl.client_id=date_tbl.client_id INNER JOIN mass_tbl ON client_tbl.client_id=mass_tbl.client_id WHERE client_tbl.client_id='$id'");
+
+        while($row = mysqli_fetch_assoc($data)){
+            $fname          =$row['client_fname'];
+            $lname          =$row['client_lname'];
+            $contact        =$row['client_contact'];
+            $email          =$row['client_email'];
+            $date           =$row['date'];
+            $time           =$row['time'];
+
+            $massName       =$row['mass_name'];
+            $massType       =$row['mass_type'];
+            $comment        =$row['mass_other'];
+
+        }
+    ?>
+        <head>
+            <title>Submitted Form</title>
+            <!-- web page icon -->
+            <link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- bootstrap -->
+            <link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+        </head>
+        <style type="text/css" media="print">
+        .dontprint
+        { display: none; }
+        </style>
+            <div class="modal-content" style="width: 1000px;margin-left: auto;margin-right: auto">
+                <div class="modal-header">
+                    <h4 class="modal-title col-md-8">MASS FORM</h4>
+                    <h5 class="dontprint modal-title col-md-4" style="text-align: right;"><a href="reservation.php" style="text-decoration: none;color: black;"><span class="glyphicon glyphicon-circle-arrow-left"></span> Go Back</a></h5>
+                </div>
+
+                <div class="modal-body">
+                    <div class="modal-title">FROM</div>
+                    <p><b>Name:</b> <?php echo "$fname"." "."$lname"; ?> <br>
+                        <b>Email:</b> <?php echo "$email"; ?> <br>
+                        <b>Contact:</b> <?php echo "$contact"; ?>
+                    </p>
+                </div>
+                    <div class="modal-body">
+                        <form action="" method="POST">
+                            <div class="form-group" style="margin-left: -15px">
+                                
+                                <div class="col-md-6">
+                                    <h5 style="font-family:Lucida Calligraphy">Name of Client:</h5>
+                                    <input type="text" class="form-control" name="Name_of_Client" value="<?php echo $massName; ?>" disabled="">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5 style="font-family:Lucida Calligraphy">Type of Thankgiving Mass:</h5> 
+                                    <input type="text" name="type" class="form-control" value="<?php echo $massType; ?>" disabled="">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Contact Number:</h5> 
+                                    <input type="text" class="form-control" name="contact" value="<?php echo $contact; ?>" disabled="">
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Date:</h5> 
+                                   <input type="text" name="datepicker" class="form-control" value="<?php echo date("F j, Y ", strtotime($date)); ?>" disabled=""/>
+                                </div>
+                                
+                                <div class="col-md-4">
+                                    <h5 style="font-family:Lucida Calligraphy">Time:</h5> 
+                                    <input type="text" name="time" value="<?php echo date('h:i a', strtotime($time)); ?>" disabled="" class="form-control">
+                                </div>
+
+                                <div class="col-md-12">
+                                    <h5 style="font-family:Lucida Calligraphy">Other information or Request</h5>
+                                    <textarea style="resize: none" name="cmnt" disabled="" class="form-control col-md-6" rows="4"> <?php echo nl2br($comment); ?></textarea> 
+                                </div>
+                            </div>
+                            <p class="help-block">Client's comment</p><br>
+                        </form>
+                    </div>
+                    <script>
+                        function myFunction() {
+                            window.print();
+                        }
+                    </script>
+                    <div class="modal-footer">
+                        <br><br><br><button style="display:block;margin-left:auto;margin-top:-50px" class="btn btn-primary btn-lg hidden-print" onclick="myFunction()"><span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print</button>
+                    </div>
+            </div>
+
+
+<?php }
+
+}
+
+?>
+
+</body>
+</html>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a id="nav" class="navbar-brand" href="../index.php">St. Vincent Ferer Parish Church<small>&nbsp;(Admin)</small></a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a id="nav" href="index.php"><span class="glyphicon glyphicon-dashboard" style="margin-right:5px;"></span>Dashboard&nbsp;
+                <span class="badge" title="Unread" style="background-color: #3a87ad;margin-top: -10px; margin-left: -5px;">
+                    <?php
+                        include("../db.php");
+                        $sql = $conn->query("SELECT * FROM mssg_tbl WHERE mssg_status=0 ORDER BY mssg_date DESC");
+                        echo "<small>".$count = mysqli_num_rows($sql)."</small>";
+                        
+                    ?>
+                </span></a></li>
+            <li><a id="nav" href="reservation.php"><span class="glyphicon glyphicon-list" style="margin-right:5px;"></span>Reservation&nbsp;
+                <span class="badge" title="Pending" style="background-color: #f89406;margin-top: -10px; margin-left: -5px;">
+                    <?php
+                        $sql = $conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_tbl.client_id=date_tbl.client_id");
+                        echo "<small>".$count = mysqli_num_rows($sql)."</small>";
+                        
+                    ?>
+                </span></a></li>
+            <li><a id="nav" href="adminevent.php"><span class="glyphicon glyphicon-edit" style="margin-right:5px;"></span>Events</a></li>
+            <li><a id="nav" href="accountset.php"><span class="glyphicon glyphicon-cog" style="margin-right:5px;"></span>Account Settings</a></li>
+            <li><a id="nav" href="logout.php"><span class="glyphicon glyphicon-off" style="margin-right:5px;"></span>Log out</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+
+<?php
+    include("../db.php");
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+    <!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+    <div id="parentDiv">
+        <?php 
+            include('header.php');
+        ?>
+
+
+        <div class="navbar page-header">
+            <h5 style="float:right;margin-top:-25px;margin-right:30px;"><?php echo date('F d Y, l'); ?></h5>
+        </div>
+                
+        <div class="media" style="margin-top: -10px;">
+            <div class="media-left">
+                <img src="../resources/icon/admin.png" class="media-object" style="width:150px;padding: 10px;margin-left: 100px;margin-top: -10px;">
+            </div>
+            <div class="media-body">
+                <h4 class="media-heading">Hello Admin</h4>
+                <p>This is your profile account.</p>
+            </div>
+        </div>
+
+
+        <div class="jumbotron">
+            <div style="height:auto;width:900px;margin-left:auto;margin-right:auto;margin-top:15px;margin-bottom:-25px;border:1px solid transparent;">
+                <p style="font-size:20px;">Messages</p>
+                
+            </div>
+            <div class="thumbnail" style="padding: 20px;height:280px;width:1100px;margin-left:auto;margin-right:auto;margin-top:20px;margin-bottom:15px;overflow:auto">
+                <p style="font-size:20px;">Unread:
+                <?php
+                    include('../db.php');
+                    $cmnt="SELECT * FROM mssg_tbl WHERE mssg_status=0 ORDER BY mssg_date DESC";
+                    $cmnt1=$conn->query($cmnt);
+                            
+                    $numrows=mysqli_num_rows($cmnt1);
+                    if($numrows>0){
+                        echo $numrows;
+                    }else{
+                        echo 0;
+                    }
+                ?>
+                <p/>
+                <table class="table table-hover" style="margin-top:15px;">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Comment</th>
+                        <th>Date</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <?php
+                        if($numrows>0){
+                            while($row=mysqli_fetch_assoc($cmnt1)){
+                                $fn = $row['mssg_fn'];
+                                $ln = $row['mssg_ln'];
+                                $email = $row['mssg_email'];
+                                $subject = $row['mssg_subject'];
+                                $comment = $row['mssg_cmnt'];
+
+                                echo "<tr class='warning'>
+                                        <td style='width:400px;'>".$fn." ".$ln."</td>
+                                        <td style='width:200px;'>".$email."</td>
+                                        <td style='width:200px;'>".$subject."</td>
+                                        <td style='width:500px;'>".nl2br($comment)."</td>
+                                        <td style='width:500px;'>".date("l\, jS \of F Y - h:i:s A", strtotime($row['mssg_date']))."</td>
+                                        <td>
+                                            <form action='' method='POST'>
+                                                <button type='submit' name='read' class='btn btn-warning'>Read</button>
+                                        </td>
+                                        <td>
+                                                <input type='hidden' name='id' value='$row[mssgnum]'/>
+                                            </form>
+                                        </td>
+                                      </tr>";
+                            }
+                            
+                            if(isset($_POST['read'])){
+                                $cmntnum=$_POST['id'];
+                                
+                                $update=$conn->query("UPDATE mssg_tbl SET mssg_status=2 WHERE mssgnum=$cmntnum");
+                                
+                                if(!$update){
+                                    die("<script>
+                                            alert('Error');
+                                        </script>");
+                                }else{
+                                    die("<script>
+                                            window.location.href='index.php';
+                                         </script>");
+                                }
+                            }
+                        }else{
+                            echo "<td colspan='7'>No Messages Found</td>";
+                        }
+                    ?>
+                </table>
+            </div>
+            <div style="height:280px;width:1070px;margin-left:auto;margin-right:auto;margin-top:20px;margin-bottom:15px;overflow:auto">
+                <p style="font-size:20px;">&nbsp;&nbsp;&nbsp;Read:
+                <?php
+                    $cmnt1="SELECT * FROM mssg_tbl WHERE mssg_status=2 ORDER BY mssg_date ASC";
+                    $cmnt2=$conn->query($cmnt1);
+                            
+                    $numrows1=mysqli_num_rows($cmnt2);
+                    if($numrows1>0){
+                        echo $numrows1;
+                    }else{
+                        echo 0;
+                    }
+                ?>
+                <p/>
+                <table class="table table-hover" style="margin-top:15px;">
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Comment</th>
+                        <th>Date</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <?php
+                        if($numrows1>0){
+                            while($row=mysqli_fetch_assoc($cmnt2)){
+                                $fn = $row['mssg_fn'];
+                                $ln = $row['mssg_ln'];
+                                $email = $row['mssg_email'];
+                                $subject = $row['mssg_subject'];
+                                $comment = $row['mssg_cmnt'];
+
+                                echo "<tr>
+                                        <td style='width:300px;'>".$fn." ".$ln."</td>
+                                        <td style='width:200px;'>".$email."</td>
+                                        <td style='width:200px;'>".$subject."</td>
+                                        <td style='width:400px;'>".nl2br($comment)."</td>
+                                        <td style='width:400px;'>".date("l\, jS \of F Y - h:i:s A", strtotime($row['mssg_date']))."</td>
+                                        <td>
+                                            <form action='' method='POST'>
+                                        </td>
+                                        <td>
+                                            <button style='background:transparent;border:1px solid transparent' type='submit' name='delete'><span class='glyphicon glyphicon-trash'></span></button>
+                                            <input type='hidden' name='id' value='$row[mssgnum]'/>
+                                            </form>
+                                        </td>
+                                      </tr>";
+                            }
+                            
+                            if(isset($_POST['delete'])){
+                                $cmntnum=$_POST['id'];
+                                
+                                $delete="DELETE FROM mssg_tbl WHERE mssgnum='$cmntnum'";
+                                $delete1=$conn->query($delete);
+                                
+                                if(!$delete1){
+                                    die("<script>
+                                            alert('Error encountered, Reloading page');
+                                            window.location.href='index.php';
+                                         </script>");
+                                }else{
+                                    die("<script>
+                                            alert('Message succesfully deleted');
+                                            window.location.href='index.php';
+                                         </script>");
+                                }
+                            }
+                        }else{
+                            echo "<td colspan='6'>No Messages Found</td>";
+                        }
+                    ?>
+                </table>
+            </div><!-- ENDS -->
+        </div>
+
+
+		<div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+	</div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+		window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+?>
+<?php
+    Session_Start();
+    Session_Destroy();
+    header("location:../admin-login.php");
+?>
+<?php
+    include("../db.php");
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="page-header">
+                <h1 style="text-align:center">RESERVATIONS</h1>
+            </div>
+            <?php include('reserve-header.php'); ?>
+
+            <div>
+                <h3 style="text-align:center;">Total of:     
+                <?php
+                    include('../db.php');
+
+                    $count="SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_tbl.client_id=date_tbl.client_id";
+                    $count1=$conn->query($count);
+                            
+                    $numrows=mysqli_num_rows($count1);
+                    if($numrows>0){
+                        echo $numrows;
+                    }else{
+                        echo 0;
+                    }?>
+                </h3>
+
+                <br>
+                <h3 style="text-align:center;">Pending</h3> 
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.*, wed_tbl.wed_groom, wed_tbl.wed_bride FROM client_tbl, date_tbl, wed_tbl WHERE ordertype=0 AND client_order='wedding' AND client_tbl.client_id=date_tbl.client_id AND client_tbl.client_id=wed_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>
+                                <tr class='active'><th colspan='14' style='text-align: center'>WEDDING</th></tr>
+                                <tr class='warning'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Groom</th>
+                                    <th>Bride</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='warning'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".$row['wed_groom']."</td>
+                                    <td>".$row['wed_bride']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td><button type='submit' name='yes' class='btn btn-success'>Approve</button></td>
+                                    <td><button type='submit' name='no' class='btn btn-danger'>Deny</button></td>
+
+                        <?php
+                               echo "<input type='hidden' name='date_id' value='".$row['date_id']."'/>
+                                  </tr>
+                                </form>
+                                 ";
+                            $counter++;
+                        }
+                        if(isset($_POST['yes'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $yes=$conn->query("UPDATE date_tbl SET ordertype=1 WHERE date_id='$dateID'");
+                            
+                            if(!$yes){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Approve');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                        
+                        if(isset($_POST['no'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $no=$conn->query("UPDATE date_tbl SET ordertype=2 WHERE date_id='$dateID'");
+                            
+                            if(!$no){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Deny');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_order='baptism' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'> 
+                                <tr class='active'><th colspan='14' style='text-align: center'>BAPTISM</th></tr>
+                                <tr class='warning'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='warning'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td><button type='submit' name='yes' class='btn btn-success'>Approve</button></td>
+                                    <td><button type='submit' name='no' class='btn btn-danger'>Deny</button></td>
+                                    <td></td>
+                                    <td></td>
+
+                        <?php
+                               echo "<input type='hidden' name='date_id' value='".$row['date_id']."'/>
+                                  </tr>
+                                </form>
+                                 ";
+                            $counter++;
+                        }
+                        if(isset($_POST['yes'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $yes=$conn->query("UPDATE date_tbl SET ordertype=1 WHERE date_id='$dateID'");
+                            
+                            if(!$yes){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Approve');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                        
+                        if(isset($_POST['no'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $no=$conn->query("UPDATE date_tbl SET ordertype=2 WHERE date_id='$dateID'");
+                            
+                            if(!$no){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Deny');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_order='funeral' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'> 
+                                <tr class='active'><th colspan='14' style='text-align: center'>FUNERAL</th></tr>
+                                <tr class='warning'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='warning'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td><button type='submit' name='yes' class='btn btn-success'>Approve</button></td>
+                                    <td><button type='submit' name='no' class='btn btn-danger'>Deny</button></td>
+                                    <td></td>
+                                    <td></td>
+
+                        <?php
+                               echo "<input type='hidden' name='date_id' value='".$row['date_id']."'/>
+                                  </tr>
+                                </form>
+                                 ";
+                            $counter++;
+                        }
+                        if(isset($_POST['yes'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $yes=$conn->query("UPDATE date_tbl SET ordertype=1 WHERE date_id='$dateID'");
+                            
+                            if(!$yes){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Approve');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                        
+                        if(isset($_POST['no'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $no=$conn->query("UPDATE date_tbl SET ordertype=2 WHERE date_id='$dateID'");
+                            
+                            if(!$no){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Deny');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                    }
+                ?>
+                </table>
+            </div>
+
+
+            <div>
+
+                <?php
+                    $selectAll=$conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_order='mass' AND client_tbl.client_id=date_tbl.client_id");
+                    
+                    $numrows=mysqli_num_rows($selectAll);
+                    if($numrows<=0){
+                        // echo "<p style='font-size:16px;text-align:center'>No Pending Orders Found</p>";
+                    }else{
+                        echo "<table id='myTable' class='table table-hover table-bordered'>  
+                                <tr class='active'><th colspan='14' style='text-align: center'>MASS</th></tr>
+                                <tr class='active warning'>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Gender</th>
+                                    <th>Email</th>
+                                    <th>Contact</th>
+                                    <th>Date and Time Reserved</th>
+                                    <th>Date Submitted</th>
+                                    <th>Form</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>";
+
+                        $counter = 1;
+                        while($row=mysqli_fetch_array($selectAll)){
+                            $clientID = $row['client_id'];
+                            $order = $row['client_order'];
+                                
+                            echo "<tr class='warning'>
+                                    <td>".$counter."</td>
+                                    <td style='width: 300px;'>".ucwords($row['client_fname'])." ".ucwords($row['client_mname'])." ".ucwords($row['client_lname'])."</td>
+                                    <td>".$row['client_gender']."</td>
+                                    <td>".$row['client_email']."</td>
+                                    <td>".$row['client_contact']."</td>
+                                    <td>".date("l, F j, Y ", strtotime($row['date']))." at ".date("h:i a", strtotime($row['time']))."</td>
+                                    <td>".date("l\, jS \of F Y - h:i:s A", strtotime($row['submitted']))."</td>
+                                    <td>".ucwords($order)."</td>
+                                 ";
+
+                            echo "<form action='' method='POST'>"?>
+                                    <td><a href='formsubmitted.php?clientID=<?php echo $clientID; ?>&&clientOrder=<?php echo $order; ?>'>
+                                    <button type='button' name='form' class='btn btn-primary'>Form</button>
+                                    </a></td>
+                                    <td><button type='submit' name='yes' class='btn btn-success'>Approve</button></td>
+                                    <td><button type='submit' name='no' class='btn btn-danger'>Deny</button></td>
+                                    <td></td>
+                                    <td></td>
+
+                        <?php
+                               echo "<input type='hidden' name='date_id' value='".$row['date_id']."'/>
+                                  </tr>
+                                </form>
+                                 ";
+                            $counter++;
+                        }
+                        if(isset($_POST['yes'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $yes=$conn->query("UPDATE date_tbl SET ordertype=1 WHERE date_id='$dateID'");
+                            
+                            if(!$yes){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Approve');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                        
+                        if(isset($_POST['no'])){
+                            $dateID=$_POST['date_id'];
+                            
+                            $no=$conn->query("UPDATE date_tbl SET ordertype=2 WHERE date_id='$dateID'");
+                            
+                            if(!$no){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }else{
+                                die("<script>
+                                        alert('Reservation successfuly labeled as Deny');
+                                        window.location.href='reservation.php';
+                                     </script>");
+                            }
+                        }
+                    }
+                ?>
+                </table>
+        
+                <script>
+                function myFunction() {
+                    var input, filter, table, tr, td, i;
+                    input = document.getElementById("myInput");
+                    filter = input.value.toUpperCase();
+                    table = document.getElementById("myTable");
+                    tr = table.getElementsByTagName("tr");
+                        for (i = 0; i < tr.length; i++) {
+                            td = tr[i].getElementsByTagName("td")[1]; // This code only get the first "td" element
+                            if (td) {
+                                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                                    tr[i].style.display = "";
+                                } else {
+                                    tr[i].style.display = "none";
+                                }
+                             }         
+                        }
+                }
+                </script>
+            </div>
+
+		<div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+	</div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+				window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+
+
+<nav class="navbar navbar-default">
+  <center>
+    <div class="container-fluid">
+      <ul class="nav navbar-nav">
+        <li><a href="reservation.php">Pending&nbsp;
+          <span class="badge" title="Unread" style="background-color: #3a87ad;margin-top: -10px; margin-left: -5px;">
+            <?php
+                include("../db.php");
+                $sql = $conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=0 AND client_tbl.client_id=date_tbl.client_id");
+                echo "<small>".$count = mysqli_num_rows($sql)."</small>";
+                
+            ?>
+          </span></a></li>
+        <li><a href="approved.php">Approved&nbsp;
+          <span class="badge" title="Unread" style="background-color: #468847;margin-top: -10px; margin-left: -5px;">
+            <?php
+                include("../db.php");
+                $sql = $conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=1 AND client_tbl.client_id=date_tbl.client_id");
+                echo "<small>".$count = mysqli_num_rows($sql)."</small>";
+                
+            ?>
+          </span></a></li>
+        <li><a href="denied.php">Denied&nbsp;
+          <span class="badge" title="Unread" style="background-color: #b94a48;margin-top: -10px; margin-left: -5px;">
+            <?php
+                include("../db.php");
+                $sql = $conn->query("SELECT client_tbl.*, date_tbl.* FROM client_tbl, date_tbl WHERE ordertype=2 AND client_tbl.client_id=date_tbl.client_id");
+                echo "<small>".$count = mysqli_num_rows($sql)."</small>";
+                
+            ?>
+          </span></a></li>
+      </ul>
+      <!-- <form class="navbar-form navbar-right">
+        <div class="input-group">
+          <input style="width: 300px;" class="form-control" type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names.." title="Type in a name">
+          <div class="input-group-btn">
+            <button class="btn btn-default" type="submit">
+              <i class="glyphicon glyphicon-search"></i>
+            </button>
+          </div>
+        </div>
+      </form> -->
+    </div>
+  </center>
+</nav>
+<?php
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="page-header">
+
+                <h1 style="text-align:center"></h1>
+            </div>
+            <center>
+            <h4>Reminders Admin: if you forgot your Password or UserName you can use a private key to log-in</h4>
+            <h4>(User Key:ojt)</h4>               </center>
+           <div class="modal-content" style="width:500px;margin-left:auto;margin-right:auto;margin-top:50px;margin-bottom:88px;">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Admin username and password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php
+                            include("../db.php");
+                            $db1="SELECT * FROM admin_tbl";
+                            $select1=$conn->query($db1);
+
+                            if(!$select1){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='adminaccountset.php';
+                                     </script>");
+                            }else{
+                                while($row=mysqli_fetch_array($select1)){
+                                    $pass=strlen($row['admin_pass']);
+                        ?>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <p style="text-align:center;"><?php echo $row['admin_user'];?></p>
+                        </div>
+                        <?php
+                                }
+                        ?>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <p style="text-align:center;">
+                                *****
+                            </p>
+                        </div>
+                        <?php  
+                            }
+                        ?>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="" method="POST">
+                            <input type="submit" name="changeuser" class="btn btn-default" value="Change Username"/>
+                            <input type="submit" name="changepass" class="btn btn-default" value="Change Password"/>
+                        </form>
+                        
+                        <?php
+                            if(isset($_POST['changeuser'])){
+                                die("<script>
+                                        window.location.href='changeuser.php';
+                                     </script>");
+                            }
+
+                            if(isset($_POST['changepass'])){
+                                die("<script>
+                                        window.location.href='changepass.php';
+                                     </script>");
+                            }
+                        ?>
+                    </div>
+               
+            </div>
+            
+		<div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+	</div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+				window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+
