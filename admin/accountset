@@ -1,0 +1,103 @@
+<?php
+    session_Start();
+    if(isset($_SESSION['admin_user'])){
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Admin Account</title>
+
+	<!-- web page icon -->
+	<link rel="shortcut icon" type="image/png" href="../resources/icon/church.png">
+	<!-- bootstrap -->
+	<link rel="stylesheet" type="text/css" href="../bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
+	<!-- css -->
+	<!-- <link rel="stylesheet" href="../css/admin-account.css"> -->
+</head>
+<body>
+
+	<!-- 
+		whole page 
+	-->
+        <div id="parentDiv">
+            <?php 
+                include('header.php');
+            ?>
+            <div class="page-header">
+
+                <h1 style="text-align:center"></h1>
+            </div>
+            <center>
+            <h4>Reminders Admin: if you forgot your Password or UserName you can use a private key to log-in</h4>
+            <h4>(User Key:ojt)</h4>               </center>
+           <div class="modal-content" style="width:500px;margin-left:auto;margin-right:auto;margin-top:50px;margin-bottom:88px;">
+                    <div class="modal-header">
+                    <h4 class="modal-title">Admin username and password</h4>
+                    </div>
+                    <div class="modal-body">
+                        <?php
+                            include("../db.php");
+                            $db1="SELECT * FROM admin_tbl";
+                            $select1=$conn->query($db1);
+
+                            if(!$select1){
+                                die("<script>
+                                        alert('Error encountered, Reloading page');
+                                        window.location.href='adminaccountset.php';
+                                     </script>");
+                            }else{
+                                while($row=mysqli_fetch_array($select1)){
+                                    $pass=strlen($row['admin_pass']);
+                        ?>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <p style="text-align:center;"><?php echo $row['admin_user'];?></p>
+                        </div>
+                        <?php
+                                }
+                        ?>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <p style="text-align:center;">
+                                *****
+                            </p>
+                        </div>
+                        <?php  
+                            }
+                        ?>
+                    </div>
+                    <div class="modal-footer">
+                        <form action="" method="POST">
+                            <input type="submit" name="changeuser" class="btn btn-default" value="Change Username"/>
+                            <input type="submit" name="changepass" class="btn btn-default" value="Change Password"/>
+                        </form>
+                        
+                        <?php
+                            if(isset($_POST['changeuser'])){
+                                die("<script>
+                                        window.location.href='changeuser.php';
+                                     </script>");
+                            }
+
+                            if(isset($_POST['changepass'])){
+                                die("<script>
+                                        window.location.href='changepass.php';
+                                     </script>");
+                            }
+                        ?>
+                    </div>
+               
+            </div>
+            
+		<div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved</div>
+	</div>
+</body>
+</html>
+<?php
+    }else{
+        die("<script>
+                alert('Log in admin account first');
+				window.location.href='../admin-login.php';
+            </script>".mysqli_error());
+    }
+
