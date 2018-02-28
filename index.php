@@ -1,127 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Saint Vincent Ferrer Parish</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Online Examination</title>
 	<!-- web page icon -->
-	<link rel="shortcut icon" type="image/png" href="resources/icon/church.png">
+	<link rel="shortcut icon" type="image/png" href="images/file.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<!-- bootstrap -->
-	<link rel="stylesheet" type="text/css" href="bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css">
-	<!-- css -->
-	<link rel="stylesheet" href="css/main.css">
-	<!-- responsive menu -->
-	<script src="js/jquery-1.12.0.min.js"></script>
-  	<script src="bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-  	<!-- google map api -->
-    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBu5nZKbeK-WHQ70oqOWo-_4VmwOwKP9YQ"></script>
-    <script src="js/googlemap.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
+	<link href="bootstrap/Bootstrap 3.3.7/bootstrap-3.3.7/dist/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<style type="text/css">  
+        #parentDiv{
+           height:auto;
+        }
+
+    </style>
 </head>
 <body>
+	<div id="parentDiv">
+            <nav class="navbar navbar-default" role="navigation">
+              <div class="container-fluid">
+                <div class="navbar-header">
+                    <a id="nav" class="navbar-brand" href="index.php">Student Examination <small>Online</small></a>
+                </div>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a id="nav" href="admin-login.php"><span class="glyphicon glyphicon-user" style="margin-right:5px;"></span>Admin</a></li>
+                    </ul>
+              </div>
+            </nav>
 
-	<!-- 
-		whole page 
-	-->
-	<div id="parent-div">
-		<!-- 
-			navigation bar style
-		-->
-        <nav class="navbar navbar-default text-center" style="background:url('resources/backgrounds/home.jpg'); background-position: bottom center; background-attachment: fixed; background-repeat: no-repeat;background-size: 100%">
-			<!-- 
-				buttons 
-			-->
-  			<div id="bg-overlay" class="container-fluid" style="position: relative;">
-	            <div class="navbar-header">
-			        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>
-			            <span class="icon-bar"></span>                        
-			        </button>
-			    </div>
-			    <div class="collapse navbar-collapse" id="myNavbar">
-			        <ul class="nav navbar-nav navbar-right">
-			            <!--
-			                Dropdowns
-			            -->
-			            <li class="dropdown"><a style="color: white;" href="about.php">ABOUT</a>
-			                <ul class="dropdown-content list-unstyled ">
-			                    <li><a href="about.php">WHO ARE WE</a></li>
-                    			<li><a href="payment.php">PAYMENT</a></li>
-			                    <li><a href="contact-us.php">CONTACT US</a></li>
-			                </ul>
-			            </li>
-			            <li class="dropdown"><a style="color: white;" href="mass.php">RESERVATIONS</a>
-			                <ul class="dropdown-content list-unstyled ">
-                    			<li><a href="mass.php">MASS</a></li>
-			                    <li><a href="wedding.php">WEDDING</a></li>
-			                    <li><a href="baptism.php">BAPTISM</a></li>
-			                    <li><a href="funeral.php">FUNERAL</a></li> 
-			                </ul>
-			            </li>
-			            <li><a style="color: white;" href="gallery.php">GALLERY</a></li>
-			            <li><a style="color: white;" href="events.php">UPCOMING EVENTS</a></li>
-			            <li class="dropdown"><a style="color: white;" href="admin-login.php">MEMBERS</a>
-			                <ul class="dropdown-content list-unstyled " style="min-width: 118px;">
-			                    <li><a href="admin-login.php">ADMIN</a></li>
-			                </ul>
-			            </li>
-			        </ul>
-			    </div>
-  				<!-- 
-  					title 
-  				-->
-  				<div class="main-title">
-	  				<p id="p1">WELCOME TO THE</p>
-	  				<p id="p2">SAINT VINCENT FERRER PARISH</p>
-	  				<!-- <button type="button" class="btn btn-default btn-lg">WHO ARE WE?</button> -->
-  				</div>
-  			</div>
-		</nav>
-		<!-- end ng tile bar -->
+            <div class="navbar page-header">
+                <h5 style="float:right;margin-top:-25px;margin-right:30px;"><?php echo date('d F Y, l'); ?></h5>
+                <h1 class="text-center">WELCOME</h1>
+            </div>
+            
+            <div style="height:100px;width:800px;margin-left:auto;margin-right:auto;margin-top:30px;">
+                <ul style="font-size:15px;text-align:left;"> 
+                    <li>If you're a <strong>student</strong> you must create an account to take the exam; click the box below labeled as <i>student</i>.</li>
+                    <li>If you're an employee <strong>teacher</strong> you must create an account to input your exam; click the box below labeled as <i>teacher</i>.</li>
+                    <li>If you're the <strong>admin</strong> just click the admin menu on the right side corner to login your account.</li>
+                </ul>
+            </div><br/>
+            
+            <div class="jumbotron text-center">
+                <h2 style="margin-top:-5px;">Register as<!-- <span class="label label-default" style="background:red;">HOT</span> --></h2><br/><br>
+                                            <center>
+                <table class="row" style="display: block; ">
+                	<tr class="col-md-3 col-md-offset-4 ">
+                        <td>
+                            <div class="thumbnail" style="padding: 50px">
+                              <a href="student-signup.php">
+                                <img src="images/student-icon.png" alt="Student" style="width:100%">
+                                <div class="caption">
+                                  <p>STUDENT</p>
+                                </div>
+                              </a>
+                            </div>
+                            </td>
+                            <td style="padding: 80px;">OR</td>
+                	    <td class="col-md-3">
+						    <div class="thumbnail" style="padding: 50px">
+						      <a href="teacher-signup.php">
+						        <img src="images/teacher-icon.png" alt="Teacher" style="width:100%">
+						        <div class="caption">
+						          <p>TEACHER</p>
+						        </div>
+						      </a>
+					   		</div>
+					    </td>
+				    </tr>
+                                    
+                </table><br></center>
 
-		<!-- First Container -->
-		<div class="part2">
-			<h3>Your presence is welcome</h3>
-	        <h1 style="font-family: Edwardian Script ITC; font-size: 60px;">Parokya ng San Vicente Ferrer</h1>
-	        <h4>Mayapyap Sur Cabanatuan</h4><br>
-	        
-	        <!--
-	            MADE WITH <3 AND SWEAT
-	        -->
-	        <div class="container-fluid">
-		        <p>
-		           Ang malaking pagbabago sa istraktura ng Simbahan ay pinasimulan ni <strong>Fr. Julius Belen</strong>, at ipinagpatuloy ng Butihing Pari na si <strong>Fr. Joey B. Alto</strong>, sa tulong ng mga mananampalataya sa Parokya ng San Vicente Ferrer. Patuloy na lumago at naisaayos ang mga ibat ibang pagawain sa simbahan sa tulong at pamamahala ni <strong>Bro. Arturo C. Mandrid</strong>, Bilang Parish Project Coordinator.
-		        </p>
-
-		        <p>
-		        	This was made for the reservation of dates in Wedding, Baptismal and Funeral Mass of Saint Vincent Ferrer Parish. Also highlighting the upcoming events happening in Saint Vincent Ferrer Parish.
-		        </p>
-
-	        </div>
-	       
-	        
-	        <br><hr><br>
-	        <!--
-	            LOCATION
-	        -->
-	        <h1>Location & Meeting Times</h1>
-	        <p>Mayapyap Cabanatuan City</p>
-	        <h3>
-	            Sunday 6am-7am & 8am-9am
-	        </h3><br>
-	        
-			<!-- <div id="map"></div> -->
-   			<div>
-   				<img src="resources/map.png"><br><br>
-   			</div>
-
-	        
-		</div>
-
-		<!-- 
-			footer
-		-->
-		<?php include('footer.php'); ?>
-	</div>
+                <h5>Already have an account? Login <a href="login.php">here</a></h5>
+            </div>
+            
+            <div class="well" style="text-align:center;margin-bottom:0px;">Copy Right &#xA9 2017. All Rights Reserved <!-- | <a class="admin" href="admin.php">VLAN Gaming.</a> --></div>
+        </div>
 </body>
 </html>
